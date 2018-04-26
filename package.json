@@ -1,0 +1,29 @@
+{
+    "name": "error-reporting",
+    "version": "0.0.1",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "gulp",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "react": "16.3.2",
+        "axios": "0.18.0",
+        "styled-components": "3.2.6",
+        "sourcemapped-stacktrace": "1.1.8",
+        "eslint": "4.19.1"
+    },
+    "devDependencies": {
+        "babel-core": "6.26.0",
+        "babel-eslint": "8.2.3",
+        "babel-preset-env": "1.6.1",
+        "eslint-plugin-import": "2.11.0",
+        "gulp": "3.9.1",
+        "gulp-babel": "7.0.1",
+        "gulp-bump": "3.1.1",
+        "gulp-eslint": "4.0.2"
+    }
+}
