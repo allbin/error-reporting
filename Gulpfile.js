@@ -29,7 +29,7 @@ gulp.task('clean', () => {
 
 gulp.task('lint', () => {
     return gulp.src(paths.scripts)
-        .pipe(eslint())
+        .pipe(eslint({ configFile: "./.eslintrc.js" }))
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 });

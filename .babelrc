@@ -5,5 +5,8 @@
                 "node": "current"
             }
         }]
+    ],
+    "plugins": [
+        "transform-react-jsx"
     ]
 }
