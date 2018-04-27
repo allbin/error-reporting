@@ -18,7 +18,7 @@ let execPromise = (cmd) => {
 };
 
 let paths = {
-    scripts: ['src/**/*.js']
+    scripts: ['src/**/*.js', 'src/**/*.jsx']
 };
 
 
