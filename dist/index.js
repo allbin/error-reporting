@@ -22,7 +22,7 @@ var _sourcemappedStacktrace = require('sourcemapped-stacktrace');
 
 var _sourcemappedStacktrace2 = _interopRequireDefault(_sourcemappedStacktrace);
 
-var _ErrorAlert = require('./ErrorAlert.jsx');
+var _ErrorAlert = require('./ErrorAlert');
 
 var _ErrorAlert2 = _interopRequireDefault(_ErrorAlert);
 
