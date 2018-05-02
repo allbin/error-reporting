@@ -116,7 +116,7 @@ export default class ErrorAlert extends React.Component {
                 .modal_footer {
                     background-color: #fff;
                     padding: 10px 20px;
-                    border-top: 1px solid ${props => props.theme.colors.border};
+                    border-top: 1px solid black;
                     border-bottom-left-radius: 2px;
                     border-bottom-right-radius: 2px;
                     button {
