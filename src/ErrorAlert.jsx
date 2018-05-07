@@ -12,7 +12,7 @@ Possible user props
         action_label: <string, optional, action_label AND actionCB required for button to show>,
         actionCB: <function, optional, action_label AND actionCB required for button to show>
     }
-NOTE: This component also uses this.props.status which is automatically provided by ErrorReporting.
+NOTE: This component also uses this.props.custom_error_props.alex_status which is automatically provided by ErrorReporting.
 */
 export default class ErrorAlert extends React.Component {
 
@@ -51,49 +51,48 @@ export default class ErrorAlert extends React.Component {
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(26, 29, 36, 0.3);
+            background-color: #F7F9FC;
             z-index: 10;
             text-align: center;
-
-            &.w_title {
-                .modal .modal_body{
-                    padding: 16px 16px 32px;
-                }
-            }
-            &.w_body {
-                .modal .modal_title{
-                    padding: 32px 16px 0px;
-                }
-            }
 
             .modal-appear {
                 animation: ${fadeIn} 0.5s 0s both;
             }
             .modal {
-                margin: 5% 30%;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
                 background-color: #fff;
-                border-radius: 2px;
                 text-align: center;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+                box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12);
                 .modal_head {
-                    background-color: ${this.getHeadColor()};
-                    color: #fff;
-                    padding: 40px;
-                    border-top-left-radius: 2px;
-                    border-top-right-radius: 2px;
+                    height: 40%;
+                    padding-top: 3vh;
                     svg {
-                        width: 100px;
-                        height: 100px;
+                        width: 38vh;
+                        display: inline-block;
                     }
                 }
                 .modal_title {
-                    padding: 32px 16px 32px;
-                    font-size: 24px;
+                    padding: 14vh 0px 1vh;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    color: #285075;
+                    font-size: 7vh;
                 }
                 .modal_body {
-                    padding: 32px 16px;
-                    font-size: 16px;
+                    color: #285075;
+                    padding: 3vh 0;
                     opacity: 0.7;
+                    font-size: 3vh;
+                    &.detected, &.failed {
+                        color: #c6615b;
+                    }
+                    &.sent {
+                        color: #2C795F;
+                    }
                 }
 
                 .error_report {
@@ -114,18 +113,20 @@ export default class ErrorAlert extends React.Component {
                 }
 
                 .modal_footer {
-                    background-color: #fff;
-                    padding: 10px 20px;
-                    border-top: 1px solid black;
-                    border-bottom-left-radius: 2px;
-                    border-bottom-right-radius: 2px;
-                    button {
-                        background-color: ${this.getHeadColor()};
-                        border-color: ${this.getDarkHeadColor()};
-                        display: inline-block;
-                        width: 150px;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    height: 20%;
+                    a {
+                        cursor: pointer;
+                        background-color: #5BC6A1;
+                        padding: 8px 22px;
+                        border-radius: 4px;
+                        color: #fff;
+                        font-size: 2vh;
                         &:HOVER {
-                            background-color: ${this.getDarkHeadColor()};
+                            background-color: #2C795F;
                         }
                         &:first-child {
                             margin-left: 0 !important;
@@ -152,7 +153,7 @@ export default class ErrorAlert extends React.Component {
     }
 
     getDarkHeadColor() {
-        switch (this.props.status) {
+            switch (this.props.status) {
             case 'sent':
             return `#00a87e`;
             case 'failed':
@@ -178,51 +179,37 @@ export default class ErrorAlert extends React.Component {
         // }
     }
 
-    renderSVGBody(status) {
-        if (status === "detected") {
-            return (<g id="Artboard">
-                <circle id="Oval-0" fill="#ffc9c9" cx="24" cy="20" r="4"></circle>
-                <circle id="Oval-1" fill="#ffc9c9" cx="52" cy="20" r="4"></circle>
-                <circle id="Oval-2" fill="#ffc9c9" cx="80" cy="20" r="4"></circle>
-                <circle id="Oval-3" fill="#ffc9c9" cx="108" cy="20" r="4"></circle>
-                <circle id="Oval-4" fill="#ffc9c9" cx="136" cy="20" r="4"></circle>
-                <circle id="Oval-5" fill="#ffc9c9" cx="164" cy="20" r="4"></circle>
-                <circle id="Oval-6" fill="#ffc9c9" cx="192" cy="20" r="4"></circle>
-                <g id="report_letter">
-                    <rect id="Rectangle-2" fill="#FFFFFF" x="1" y="1" width="31" height="20" rx="2"></rect>
-                    <path d="M29.674,0.342 L3.3265,0.342 C1.6312,0.342 0.25035,1.7209 0.25035,3.41815 L0.25035,18.58615 C0.25035,20.28145 1.62925,21.66035 3.3265,21.66035 L29.676,21.66035 C31.3713,21.66035 32.75215,20.28145 32.75215,18.58615 L32.750197,3.41615 C32.750197,1.72085 31.371297,0.34195 29.674047,0.34195 L29.674,0.342 Z M31.3283,3.4162 L31.3283,18.5842 C31.3283,18.900605 31.23455,19.19555 31.080255,19.44555 L19.123255,11.53755 L31.117255,2.62355 C31.248115,2.85988 31.328195,3.12745 31.328195,3.4165 L31.3283,3.4162 Z M29.674,1.7619 C29.740405,1.7619 29.802905,1.7736185 29.865405,1.781431 L17.357405,11.078431 C16.771455,11.513976 15.955055,11.510071 15.371055,11.0706185 L3.105555,1.7836185 C3.17782,1.773853 3.250085,1.760181 3.32626,1.760181 L29.674,1.7619 Z M1.93,19.4649 C1.76789,19.20904 1.670235,18.90825 1.670235,18.58405 L1.672188,3.41605 C1.672188,3.132845 1.750313,2.86915 1.877268,2.6348 L13.717268,11.5998 L1.93,19.4649 Z M3.3304,20.23835 L14.9574,12.48035 C15.398805,12.70691 15.8832,12.822145 16.3695,12.822145 C16.89295,12.822145 17.4144,12.683475 17.8812,12.4198 L29.6977,20.2363 C29.6898875,20.2363 29.682075,20.238253 29.6742625,20.238253 L3.3304,20.23835 Z" id="Shape" fill="#CC4D4D" fillRule="nonzero"></path>
-                </g>
-            </g>);
-        }
-
-        if (status === "failed") {
-            return (<g id="Artboard" fillRule="nonzero" fill="#CC4D4D">
-                <g id="np_sent_638573_000000" transform="translate(102.000000, 10.000000)">
-                    <polygon id="Shape" points="3.11162678 19 0 16 16.0725373 0 19 2.95585916"></polygon>
-                </g>
-                <g id="np_sent_638573_000000" transform="translate(111.500000, 19.500000) scale(-1, 1) translate(-111.500000, -19.500000) translate(102.000000, 10.000000)">
-                    <polygon id="Shape" points="3.11162678 19 0 16 16.0725373 0 19 2.95585916"></polygon>
-                </g>
-            </g>);
-        }
-
-        //Status sent.
+    renderSVGBody() {
         return (
-            <g id="Artboard" transform="translate(96.000000, 10.000000)" fill="#02C896">
-                <polygon id="Shape" points="9.11162678 19 0 10 2.88915762 7.08281748 9.11156142 13.165569 22.0725373 0 25 2.95585916"></polygon>
+            <g id="Artboard">
+                <path d="M289.890736,159.267244 C319.088977,154.994876 347.02143,161.525358 373.688097,178.858691 C413.688097,204.858691 422,223.633622 409,239 C400.333333,249.244252 365.896032,263.333333 305.688097,281.267244 L289.890736,159.267244 Z" id="Rectangle" fill="url(#linearGradient-1)"></path>
+                <polygon id="Path-3" fill="#F9C08B" points="122 91 109 17 127 10 273 98 286 128 300 278 295 281 214 254 251 237 249 198 201 114 151 78 127 91"></polygon>
+                <polygon id="Path-4" fill="#F9C08B" points="15 276 50.5 286 86 276 43 211 15 248"></polygon>
+                <polygon id="Path-2" fill="#F9C08B" points="74 164 113 195 147 263 192 252 192 195 139 137 98 127 85 141"></polygon>
+                <g id="np_traffic-cone_1377795_000000" transform="translate(142.132960, 186.591447) rotate(-124.000000) translate(-142.132960, -186.591447) translate(-28.867040, 20.591447)" fill-rule="nonzero" fill="#285176">
+                    <path d="M291.333722,204.680587 C286.732647,202.800427 281.485871,204.986987 279.59222,209.555156 C277.71243,214.123103 279.914869,219.346008 284.516145,221.212121 L315.251982,233.509782 C321.466592,236.002757 323.795141,238.816116 323.86517,240.111414 C323.93531,241.392735 321.929285,244.428716 316.289845,247.242146 L193.373072,308.241996 C178.545274,316.124665 153.50332,316.124665 138.423777,308.241996 L15.8158491,247.630771 C9.92408947,244.385717 7.98806141,241.36357 7.98806141,240.082178 C7.98806141,238.800785 -8.42493873,254.886626 7.52515283,263.368276 L130.089986,323.96524 C141.242527,329.4666 153.559343,332.210149 166.002211,331.987314 C178.305021,332.210149 190.495426,329.494339 201.521556,324.076479 L324.704079,263.215678 C340.401672,254.873435 342.267312,244.539221 341.972832,239.107742 C341.692268,233.690168 338.662156,223.606599 322.109062,216.977514 L291.333722,204.680587 Z" id="Shape"></path>
+                    <path d="M131.859922,24.1332478 L63.6382761,210.743937 C60.8839542,218.123749 61.632559,226.365643 65.6580953,233.137437 C78.3138307,253.989903 118.624156,268 165.999997,268 C213.375839,268 253.686164,253.989903 266.3419,233.151552 L266.3419,233.137416 C270.367508,226.365621 271.116005,218.123728 268.361719,210.743916 L200.027979,24.1042728 C194.914701,9.65589621 181.25627,0 165.944999,0 C150.633729,0 136.9894,9.65589621 131.862019,24.1042728 L131.859922,24.1332478 Z M215.745752,119.671609 C206.494048,125.538616 188.810008,130.529064 165.9834,130.529064 C143.17198,130.529064 125.445272,125.312419 116.192121,119.459527 L129.497638,83.2680118 L129.511762,83.2680118 C141.334027,86.8447469 153.636848,88.6120509 165.996439,88.5270009 C178.341567,88.6259593 190.615822,86.8870909 202.437726,83.3385853 L215.745752,119.671609 Z M234.701151,171.443571 C226.169739,181.254729 199.516399,190.698543 165.998587,190.698543 C132.480776,190.698543 105.800678,181.212385 97.2960236,171.415342 L109.909453,136.920485 C123.681062,144.413215 144.006535,148.824236 166.028599,148.824236 C188.048856,148.824236 208.331299,144.413215 222.118819,136.920485 L234.701151,171.443571 Z M250.859994,223.780121 C243.204359,236.433037 210.831711,249.906052 165.997864,249.906052 C121.164017,249.906052 88.7906462,236.447151 81.1357343,223.737777 C79.9775175,221.659588 79.7939009,219.185608 80.627263,216.965983 L90.6415656,189.610264 C106.517643,201.44308 134.426794,208.822892 165.99743,208.822892 C197.568066,208.822892 225.446843,201.584589 241.353295,189.610264 L251.339393,216.965983 C252.172755,219.199687 252.003241,221.673775 250.859162,223.766007 L250.859994,223.780121 Z M165.997864,18.310033 C173.653499,18.2817566 180.51797,23.074284 183.102994,30.2984723 L196.295333,66.3061345 C186.450256,69.1194457 176.238162,70.505074 165.997864,70.4341387 C155.757566,70.5048243 145.545472,69.1193733 135.700395,66.3061345 L148.864529,30.3267017 C151.435235,23.0883987 158.314025,18.2676889 165.997864,18.310033 Z" id="Shape"></path>
+                </g>
             </g>
         );
     }
 
     render() {
-        // console.log("this.props.status:", this.props.status);
-        // console.log("this.props.custom_error_props:", this.props.custom_error_props);
-        // console.log("this.props.error_reporting:", this.props.error_reporting);
         return (
             <this.Container className={`${this.props.custom_error_props.title ? 'w_title' : null} ${this.props.custom_error_props.body ? 'w_body' : null}`}>
                 <div className="modal">
                     <div className="modal_head">
-                        { this.getIcon() }
+                        <svg width="495px" height="300px" viewBox="0 0 495 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+                            <defs>
+                                <linearGradient x1="71.0335121%" y1="20.8630174%" x2="14.2819663%" y2="97.4135166%" id="linearGradient-1">
+                                    <stop stopColor="#FDFEFF" offset="0%"></stop>
+                                    <stop stopColor="#DDE7F1" offset="100%"></stop>
+                                </linearGradient>
+                            </defs>
+                            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                                { this.renderSVGBody() }
+                            </g>
+                        </svg>
                     </div>
                     {
                         this.props.custom_error_props.title ?
@@ -234,7 +221,7 @@ export default class ErrorAlert extends React.Component {
                     }
                     {
                         this.props.custom_error_props.body ?
-                        <div className="modal_body">
+                        <div className={`modal_body ${this.props.status}`}>
                             {
                                 this.props.custom_error_props.body.map((sentence, i) => {
                                     return (<p key={i}>{sentence}</p>);
@@ -244,22 +231,6 @@ export default class ErrorAlert extends React.Component {
                         :
                         null
                     }
-                    <div className={`error_report ${this.props.status}`}>
-                        {
-                            this.props.custom_error_props.label ?
-                            <div>
-                                { this.props.custom_error_props.label }
-                            </div>
-                            :
-                            null
-                        }
-                        <svg width="216px" height="40px" viewBox="0 0 216 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-                            <defs></defs>
-                            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                                { this.renderSVGBody() }
-                            </g>
-                        </svg>
-                    </div>
 
                     <div className="modal_footer">
                         {
