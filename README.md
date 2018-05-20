@@ -7,12 +7,14 @@
 [withErrorReporting HOC](#withErrorReporting)  
 [Special Error object properties](#special-error-properties)
 
-<br><br>
+
+
 
 # Import
 Use `import ER from error-reporting` in any file to access the ErrorReporting utlities and components.
 
-<br><br>
+
+
 
 # ER utilities
 ER exposes a number of functions and one default error component.
@@ -41,7 +43,9 @@ ER exposes a number of functions and one default error component.
 
 `ER.ErrorAlert` A default alert component to let the user know what has happened and what the progress of the error report is. Used as the 2nd argument (ErrorComponent) in the `withErrorReporting` wrapper function. See example in [withErrorReporting](#withErrorReporting) section.
 
-<br><br>
+
+
+
 
 # Error reporting config
 Configure ErrorReporting by running `ER.setConfig(config_object)` with the possible properties listed below. The object extends the default config and overwrites previous values.
@@ -68,7 +72,9 @@ ER.setConfig({
     override_window_onerror: true
 });
 ```
-<br><br>
+
+
+
 
 # Manually triggered error report
 There are instances where it may not be possible to trigger a global (window) error, the error may be caught or silenced by a framework for example.  
@@ -76,7 +82,9 @@ In these cases it may be useful to trigger an error report manually.
 
 Use function `ER.setError(error_object)` to trigger an ErrorReport where `error_object` is a Javascript exception object. This will also show any defined ErrorAlert.
 
-<br><br>
+
+
+
 
 # withErrorReporting
 Wrapper function run as `ER.withErrorReporting(WrappedComponent, ErrorAlert, callback)`. This function returns a new component (a HOC) which can be used like any other React Component and contains a React error boundary as well as the ability to display any ErrorAlert that has been supplied.
@@ -130,7 +138,7 @@ And inside ErrorAlert the custom error props can be accessed like `this.props.cu
 ```
 **NOTE:** Use `ER.getError()` inside the callback function to get the [Javascript Exception object](#special-error-properties) and any properties set on it.
 
-<br><br>
+
 
 # Special Error properties
 In order to communicate what kind of error has been caught there are some special properties that ER are putting on the Javascript Exception Object (err_obj) itself.
