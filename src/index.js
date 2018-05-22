@@ -60,7 +60,7 @@ let onerrorListener = (message, source, lineno, colno, err) => {
         //This timeout is here because shortly after window.onerror the React Error Boundary will
         //trigger if the error was caused inside a React Component life cycle.
         //The Error Boundary has more information and will cancel this timeout to ensure we do
-        //not post the same error message twice.
+        //not post the same error report twice.
         window_onerror_timeout = null;
         if (!err.additional_message) {
             err.additional_message = "CAUGHT BY WINDOW.ONERROR.";
@@ -84,26 +84,16 @@ if (!window.onerror) {
 
 const errorReporting = {
     setHeader: (header_string) => {
-        //Same as using setConfig({ header: "text" });
         config.header = header_string;
     },
+
     setConfig: (config_obj) => {
-        //Configs will extend and overwrite any previous configs provided.
-        // {
-        //     disable_slack_posting       <bool, default false> - Use for disabling posting, for example during development.
-        //     header                      <string, default null> - A string prepended to the error message body.
-        //     max_network_request_data    <int, default 400> - In the case of a network error the message includes
-        //                                 data from the request if there is any. However that may be of any size,
-        //                                 default will only include the first 400 characters.
-        //     override_window_onerror     <bool, default false> - Set to true to override any other listener
-        //                                 attached to window.onerror.
-        //     slack_webhook               <slack webhook url, required> - The url to which the error is posted.
-        // }
         config = Object.assign({}, config, config_obj);
         if (config.override_window_onerror) {
             window.onerror = onerrorListener;
         }
     },
+
     getConfig: () => {
         return Object.assign({}, config);
     },
@@ -132,49 +122,10 @@ export default errorReporting;
 
 
 
-
-
-
-
-
 /////////////////////////////
 //HOC
 
-export function withErrorReporting(WrappedComponent, AltErrorComponent = undefined, prePostCB = null) {
-    /*
-        WrappedComponent <required>,
-
-        AltErrorComponent <optional>:
-            A react component that will be displayed instead of WrappedComponent when an error is detected.
-            If null is provided nothing will be rendered.
-            This component will have three props:
-                - `this.props.errorReporting`
-                - `this.props.status` - Status of the error reporting, one of 'detected', 'sent', 'failed'.
-                - `this.props.custom_error_props` - empty object if none provided by prePostCB (see below).
-
-        prePostCB <optional>:
-            A callback which is called every time the status of the error report changes.
-            Return an object from the callback with the property `prefix` to prepend the value to the error report.
-            Use the property `custom_error_props` to send those props to the AltErrorComponent as `this.props.custom_error_props`.
-            This is a good place to add things like user info.
-            NOTE: Only on status `detected` will the `prefix` property be used when the error report message is prepared.
-            NOTE: All withErrorReporting() used which returns a prefix value from prePostCB will be prepended, meaning
-            multiple withErrorReporting can contribute information to be prefixed to error message body.
-
-            Example:
-                () => {
-                    return {
-                        prefix: "User id: " + window.user_id + " Token age: " + window.token.age,
-                        custom_error_props: {
-                            error_icon: <icon>,
-                            confirm_action: () => { window.location.href = "/"; },
-                            confirm_label: "Go to start page"
-                        }
-                    };
-                }
-            Would add "User id: .... Token age: ...." between the specified Header and the Body (error message and trace).
-            And inside AltErrorComponent the custom error props can be accessed like `this.props.custom_error_props[...]`.
-    */
+export function withErrorReporting(WrappedComponent, ErrorAlert = undefined, callback = null) {
 
     return class ErrorReporting extends React.Component {
         constructor(props) {
@@ -196,8 +147,8 @@ export function withErrorReporting(WrappedComponent, AltErrorComponent = undefin
 
             let prefix = null;
             let custom_props = {};
-            if (prePostCB) {
-                let cb_return = prePostCB();
+            if (callback) {
+                let cb_return = callback();
                 if (cb_return) {
                     prefix = (cb_return.hasOwnProperty("prefix")) ? cb_return.prefix : null;
                     custom_props = (cb_return.hasOwnProperty("custom_error_props")) ? cb_return.custom_error_props : {};
@@ -229,13 +180,13 @@ export function withErrorReporting(WrappedComponent, AltErrorComponent = undefin
         }
 
         render() {
-            if (this.state.hasError && AltErrorComponent) {
-                return <AltErrorComponent
+            if (this.state.hasError && ErrorAlert) {
+                return <ErrorAlert
                     status={errorReporting.getStatus()}
                     error_reporting={errorReporting}
                     custom_error_props={this.state.custom_props}
                 />;
-            } else if (this.state.hasError && AltErrorComponent === null) {
+            } else if (this.state.hasError && ErrorAlert === null) {
                 return null;
             }
             //Carry props from upper components to the wrapped component.
@@ -243,10 +194,6 @@ export function withErrorReporting(WrappedComponent, AltErrorComponent = undefin
         }
     };
 }
-
-
-
-
 
 
 
@@ -345,9 +292,6 @@ function resolveStack(err) {
         }
     });
 }
-
-
-
 
 
 
