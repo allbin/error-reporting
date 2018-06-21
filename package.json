@@ -14,7 +14,6 @@
     "dependencies": {
         "react": "16.4.1",
         "axios": "0.18.0",
-        "styled-components": "3.3.2",
         "sourcemapped-stacktrace": "1.1.8"
     },
     "devDependencies": {
@@ -30,5 +29,8 @@
         "gulp-bump": "3.1.1",
         "gulp-allbin": "git+https://bitbucket.org/allbin/gulp-allbin.git#v0.0.6",
         "gulp-eslint": "4.0.2"
+    },
+    "peerDependencies": {
+        "styled-components": "3.x"
     }
 }
