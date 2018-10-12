@@ -82,6 +82,15 @@ function setStatus(status) {
 }
 
 var onerrorListener = function onerrorListener(message, source, lineno, colno, err) {
+    if (!err) {
+        if (message instanceof Error) {
+            err = message;
+        } else if (typeof message === "string") {
+            err = new Error("ONLY STRING PROVIDED: " + message);
+        } else {
+            err = new Error("INVALID CALL TO window.onerror. CANNOT RESOLVE.");
+        }
+    }
     window_onerror_timeout = setTimeout(function () {
         //This timeout is here because shortly after window.onerror the React Error Boundary will
         //trigger if the error was caused inside a React Component life cycle.
