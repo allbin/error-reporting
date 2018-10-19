@@ -55,6 +55,10 @@ function _setError(err) {
         //and handle it in this subsequent error catch.
         clearTimeout(window_onerror_timeout);
     }
+    if (_axios2.default.isCancel(err)) {
+        //This is true when we have manually cancelled a network request.
+        return;
+    }
     error = err;
     var prefix = setStatus("detected");
     composeMessage(err, prefix).then(function (msg) {
