@@ -3,7 +3,19 @@ import { ErrorStatus } from "../";
 
 export interface ErrorAlertProps {
   status?: ErrorStatus | null;
-  customErrorProps?: { [key: string]: any; body?: string[]; title?: string };
+  customErrorProps?: {
+    [key: string]: any;
+    body?: string[];
+    title?: string;
+    /** The text which appears on the button in the footer of the alert.
+     * Both *actionLabel* and *actionCB* required to show button.
+     */
+    actionLabel?: string;
+    /** The action triggered when user clicks the button in the footer.
+     * Both *actionLabel* and *actionCB* required to show button.
+     */
+    actionCB?: () => void;
+  };
 }
 
 function renderSVGBody(): ReactNode {
@@ -48,70 +60,92 @@ function renderSVGBody(): ReactNode {
   );
 }
 
+const containerStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "#f7f9fc",
+  zIndex: 1000000,
+  textAlign: "center"
+};
+const modalStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 20,
+  left: 20,
+  right: 20,
+  bottom: 20,
+  backgroundColor: "#fff",
+  textAlign: "center",
+  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.12)"
+};
+const svgStyle: React.CSSProperties = {
+  width: "38vh",
+  display: "inline-block"
+};
+const modalHeadStyle: React.CSSProperties = {
+  height: "40%",
+  paddingTop: "3vh"
+};
+const modalTitleStyle: React.CSSProperties = {
+  padding: "14vh 0px 1vh",
+  textTransform: "uppercase",
+  fontWeight: "bold",
+  color: "#285075",
+  fontSize: "7vh"
+};
+const modalFooterStyle: React.CSSProperties = {
+  position: "absolute",
+  left: 0,
+  right: 0,
+  bottom: 0,
+  height: "20%"
+};
+const modalBtnStyle: React.CSSProperties = {
+  cursor: "pointer",
+  backgroundColor: "#5bc6a1",
+  padding: "8px 22px",
+  borderRadius: 4,
+  color: "#fff",
+  fontSize: "2vh"
+  // &:hover {
+  //   background-color: #2c795f,
+  // }
+  // &:first-child {
+  //   margin-left: 0 !important,
+  // }
+  // &:last-child {
+  //   margin-left: 12px,
+  // }
+};
+
+const getModalBodyStyle = (
+  status?: ErrorStatus | null
+): React.CSSProperties => {
+  const base = {
+    color: "#285075",
+    padding: "3vh 0",
+    opacity: 0.7,
+    fontSize: "3vh"
+  };
+  switch (status) {
+    case "sent": {
+      return Object.assign({}, base, { color: "#00c896" });
+    }
+    default: {
+      return Object.assign({}, base, {
+        color: "#cc4d4d"
+      });
+    }
+  }
+};
+
 const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
   status,
   customErrorProps
 }) => {
-  const { title, body } = customErrorProps || {};
-  if (customErrorProps) {
-    console.log("got custom props");
-  }
-
-  const containerStyle: React.CSSProperties = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#f7f9fc",
-    zIndex: 1000000,
-    textAlign: "center"
-  };
-  const modalStyle: React.CSSProperties = {
-    position: "fixed",
-    top: 20,
-    left: 20,
-    right: 20,
-    bottom: 20,
-    backgroundColor: "#fff",
-    textAlign: "center",
-    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.12)"
-  };
-  const svgStyle: React.CSSProperties = {
-    width: "38vh",
-    display: "inline-block"
-  };
-  const modalHeadStyle: React.CSSProperties = {
-    height: "40%",
-    paddingTop: "3vh"
-  };
-  const modalTitleStyle: React.CSSProperties = {
-    padding: "14vh 0px 1vh",
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    color: "#285075",
-    fontSize: "7vh"
-  };
-  const getModalBodyStyle = (
-    status?: ErrorStatus | null
-  ): React.CSSProperties => {
-    const base = {
-      color: "#285075",
-      padding: "3vh 0",
-      opacity: 0.7,
-      fontSize: "3vh"
-    };
-    switch (status) {
-      case "sent": {
-        return Object.assign({}, base, { color: "#00c896" });
-      }
-      default: {
-        return Object.assign({}, base, {
-          color: "#cc4d4d"
-        });
-      }
-    }
-  };
+  const { title, body, actionLabel, actionCB } = customErrorProps || {};
 
   return (
     <div style={containerStyle}>
@@ -144,6 +178,7 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
           </svg>
         </div>
       </div>
+
       {title ? <div style={modalTitleStyle}>{title}</div> : null}
       {body ? (
         <div style={getModalBodyStyle(status)}>
@@ -152,7 +187,19 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
           })}
         </div>
       ) : null}
-      {status}
+
+      <div style={modalFooterStyle}>
+        {actionLabel && actionCB ? (
+          <a
+            style={modalBtnStyle}
+            onClick={(): void => {
+              actionCB();
+            }}
+          >
+            {actionLabel}
+          </a>
+        ) : null}
+      </div>
     </div>
   );
 };

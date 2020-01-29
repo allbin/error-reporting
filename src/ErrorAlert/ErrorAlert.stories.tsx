@@ -1,5 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+
 import ErrorAlert from ".";
 
 console.log(React, ErrorAlert);
@@ -22,7 +24,12 @@ storiesOf("ErrorAlert", module)
     <div style={bgDiv}>
       <ErrorAlert
         status="detected"
-        customErrorProps={{ body: ["body 1", "body 2"] }}
+        customErrorProps={{
+          title: "error title",
+          body: ["body 1", "body 2"],
+          actionLabel: "label",
+          actionCB: action("action callback")
+        }}
       />
     </div>
   ));
