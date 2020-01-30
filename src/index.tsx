@@ -1,9 +1,8 @@
 import React, { ReactNode } from "react";
 import axios, { AxiosError } from "axios";
 import StackTrace from "sourcemapped-stacktrace";
-
 import { ErrorAlertProps } from "./ErrorAlert";
-
+export { default as ErrorAlert } from "./ErrorAlert";
 let windowOnerrorTimeout: NodeJS.Timeout | number | null;
 let windowOnerrorReference: ReactError;
 
