@@ -10,7 +10,10 @@
     "storybook": "start-storybook -p 6060",
     "release:patch": "gulp buildAndReleasePatch",
     "release:minor": "gulp buildAndReleaseMinor",
-    "release:major": "gulp buildAndReleaseMajor"
+    "release:major": "gulp buildAndReleaseMajor",
+    "prebuild": "npm run lint",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "eslint --ext .ts --fix src"
   },
   "dependencies": {
     "sourcemapped-stacktrace": "1.1.11"

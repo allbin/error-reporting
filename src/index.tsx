@@ -16,7 +16,7 @@ export type ErrorReportConfig = {
 export type ErrorStatus = "detected" | "sent" | "failed";
 export interface OnErrorCBResponse {
   prefix?: string;
-  custom_error_props?: { [key: string]: any };
+  custom_error_props?: ErrorAlertProps;
 }
 
 export interface ERProps {
@@ -382,12 +382,12 @@ export class ErrorReporting extends React.Component<ERProps, ERState> {
     //This is to ensure component will re-render when the status of error changes.
 
     let prefix: string | null = null;
-    let customProps: { [key: string]: any } = {};
+    let custom_props: { [key: string]: any } = {};
     if (this.props.callback) {
       const CBReturn = this.props.callback();
       if (CBReturn) {
         prefix = CBReturn.prefix ? CBReturn.prefix : null;
-        customProps = CBReturn.custom_error_props
+        custom_props = CBReturn.custom_error_props
           ? CBReturn.custom_error_props
           : {};
       }
@@ -395,7 +395,7 @@ export class ErrorReporting extends React.Component<ERProps, ERState> {
     this.setState({
       hasError: true,
       status: status,
-      custom_props: customProps
+      custom_props: custom_props
     });
     return prefix;
   }
@@ -423,7 +423,7 @@ export class ErrorReporting extends React.Component<ERProps, ERState> {
     const EA = this.props.ErrorAlert;
     if (this.state.hasError && EA) {
       return (
-        <EA status={getStatus()} customErrorProps={this.state.custom_props} />
+        <EA status={getStatus()} custom_error_props={this.state.custom_props} />
       );
     } else if (this.state.hasError && EA === null) {
       return null;

@@ -24,7 +24,7 @@ storiesOf("ErrorAlert", module)
     <div style={bgDiv}>
       <ErrorAlert
         status="detected"
-        customErrorProps={{
+        custom_error_props={{
           title: "error title",
           body: ["body 1", "body 2"],
           actionLabel: "label",

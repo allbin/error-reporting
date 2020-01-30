@@ -3,16 +3,16 @@ import { ErrorStatus } from "../";
 
 export interface ErrorAlertProps {
   status?: ErrorStatus | null;
-  customErrorProps?: {
+  custom_error_props?: {
     [key: string]: any;
     body?: string[];
     title?: string;
     /** The text which appears on the button in the footer of the alert.
-     * Both *actionLabel* and *actionCB* required to show button.
+     * Both *action_label* and *actionCB* required to show button.
      */
-    actionLabel?: string;
+    action_label?: string;
     /** The action triggered when user clicks the button in the footer.
-     * Both *actionLabel* and *actionCB* required to show button.
+     * Both *action_label* and *actionCB* required to show button.
      */
     actionCB?: () => void;
   };
@@ -143,9 +143,9 @@ const getModalBodyStyle = (
 
 const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
   status,
-  customErrorProps
+  custom_error_props
 }) => {
-  const { title, body, actionLabel, actionCB } = customErrorProps || {};
+  const { title, body, action_label, actionCB } = custom_error_props || {};
 
   return (
     <div style={containerStyle}>
@@ -189,14 +189,14 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
       ) : null}
 
       <div style={modalFooterStyle}>
-        {actionLabel && actionCB ? (
+        {action_label && actionCB ? (
           <a
             style={modalBtnStyle}
             onClick={(): void => {
               actionCB();
             }}
           >
-            {actionLabel}
+            {action_label}
           </a>
         ) : null}
       </div>

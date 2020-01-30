@@ -3,31 +3,29 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true
+    node: true,
   },
   extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier",
-    "plugin:prettier/recommended"
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly"
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
   },
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: "module",
-    tsconfigRootDir: __dirname,
+    sourceType: 'module',
     project: ["tsconfig.json"]
   },
-  plugins: ["@typescript-eslint", "prettier"],
+  plugins: ['prettier', '@typescript-eslint'],
   rules: {
-    "@typescript-eslint/camelcase": ["error", { properties: "never" }],
-    "@typescript-eslint/no-explicit-any": "off",
-    "prettier/prettier": "error"
-  }
+    'prettier/prettier': 'error',
+    '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    camelcase: 'off'
+  },
 };
