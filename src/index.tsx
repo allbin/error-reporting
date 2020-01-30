@@ -218,7 +218,7 @@ function composeMessage(
   });
 }
 
-//
+//END OF MESSAGE COMPOSITION
 //
 //
 //
@@ -270,6 +270,12 @@ export function setError(err: ExtendedError): void {
     });
 }
 
+////////////////
+////////////////
+////////////////
+////////////////
+//INITIAL ERROR LISTENER ATTACHING
+
 const onerrorListener = (
   message: Event | string,
   source?: string,
@@ -311,6 +317,11 @@ if (!window.onerror) {
     "ErrReporting: window.onerror already assigned. Use setConfig({ override_window_onerror: true }) to override."
   );
 }
+
+////////////////
+////////////////
+////////////////
+////////////////
 
 export function setHeader(headerString: string): void {
   config.header = headerString;
