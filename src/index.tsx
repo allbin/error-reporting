@@ -98,6 +98,13 @@ function postToSlack(msg: string): Promise<void> {
   });
 }
 
+export function sendDebug(msg: string | string[]): void {
+  if (Array.isArray(msg)) {
+    postToSlack(msg.join("\n"));
+  } else {
+    postToSlack(msg);
+  }
+}
 ///////////////////////////////
 ///////////////////////////////
 ///////////////////////////////
@@ -193,6 +200,13 @@ function composeMessage(
   prefix: string | null = null
 ): Promise<string> {
   let head = config.header || "";
+  head +=
+    location.protocol +
+    location.hostname +
+    " '" +
+    location.pathname +
+    "'" +
+    "\n";
   head += "Created at " + new Date().toISOString() + "\n";
   if (prefix) {
     head += prefix;
