@@ -4,9 +4,8 @@
 
 [Import](#import)  
 [Utilities](#er-utilities)  
-[Config](#error-reporting-config)  
+[Error reporting component](#error-reporting-component)  
 [Manually trigger errors](#manually-triggered-error-report)  
-[withErrorReporting HOC](#withErrorReporting)  
 [Special Error object properties](#special-error-properties)
 
 # Import
@@ -23,11 +22,14 @@ ER exposes a number of functions and one default error alert component.
 
 `ER.setHeader(<string>)` quick way to set global report header. Same as running `setConfig({ ... header: <string> })`.
 
+`ER.sendDebug()` Takes an string array or string and send input string(s). Message not shown to user. 
+
 `ER.getConfig()` Returns the current config options.
 
 `ER.getError()` Returns the error object if an error has been detected or has been submitted through [`setError(err)`](#manually-triggered-error-report). Otherwise returns null.
 
 `ER.getStatus()` Returns the status of the error report if an error has been detected or submitted. Possible return values are:
+ 
 
 - null
 - detected - Report is in the process of being composed.
