@@ -192,7 +192,7 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
         {action_label && actionCB ? (
           <a
             style={modalBtnStyle}
-            onClick={(): void => {
+            onClick={() => {
               actionCB();
             }}
           >
