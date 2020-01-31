@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { ErrorStatus } from "../";
+import "./style.css";
 
 export interface ErrorAlertProps {
   status?: ErrorStatus | null;
@@ -10,7 +11,7 @@ export interface ErrorAlertProps {
     /** The text which appears on the button in the footer of the alert.
      * Both *action_label* and *actionCB* required to show button.
      */
-    action_label?: string;
+    actionLabel?: string;
     /** The action triggered when user clicks the button in the footer.
      * Both *action_label* and *actionCB* required to show button.
      */
@@ -59,67 +60,7 @@ function renderSVGBody(): ReactNode {
     </g>
   );
 }
-
-const containerStyle: React.CSSProperties = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: "#f7f9fc",
-  zIndex: 1000000,
-  textAlign: "center"
-};
-const modalStyle: React.CSSProperties = {
-  position: "fixed",
-  top: 20,
-  left: 20,
-  right: 20,
-  bottom: 20,
-  backgroundColor: "#fff",
-  textAlign: "center",
-  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.12)"
-};
-const svgStyle: React.CSSProperties = {
-  width: "38vh",
-  display: "inline-block"
-};
-const modalHeadStyle: React.CSSProperties = {
-  height: "40%",
-  paddingTop: "3vh"
-};
-const modalTitleStyle: React.CSSProperties = {
-  padding: "14vh 0px 1vh",
-  textTransform: "uppercase",
-  fontWeight: "bold",
-  color: "#285075",
-  fontSize: "7vh"
-};
-const modalFooterStyle: React.CSSProperties = {
-  position: "absolute",
-  left: 0,
-  right: 0,
-  bottom: 0,
-  height: "20%"
-};
-const modalBtnStyle: React.CSSProperties = {
-  cursor: "pointer",
-  backgroundColor: "#5bc6a1",
-  padding: "8px 22px",
-  borderRadius: 4,
-  color: "#fff",
-  fontSize: "2vh"
-  // &:hover {
-  //   background-color: #2c795f,
-  // }
-  // &:first-child {
-  //   margin-left: 0 !important,
-  // }
-  // &:last-child {
-  //   margin-left: 12px,
-  // }
-};
-
+/*
 const getModalBodyStyle = (
   status?: ErrorStatus | null
 ): React.CSSProperties => {
@@ -140,22 +81,25 @@ const getModalBodyStyle = (
     }
   }
 };
-
+*/
 const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
   status,
   custom_error_props
 }) => {
-  const { title, body, action_label, actionCB } = custom_error_props || {};
+  const { title, body, actionLabel, actionCB } = custom_error_props || {};
+
+  console.log(actionLabel);
+  console.log(actionCB);
 
   return (
-    <div style={containerStyle}>
-      <div style={modalStyle}>
-        <div style={modalHeadStyle}>
+    <div className="container_style">
+      <div className="layout_base">
+        <div className="layout_graphic">
           <svg
             width="495px"
             height="300px"
             viewBox="0 0 495 300"
-            style={svgStyle}
+            className="graphic"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -168,8 +112,8 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
                 y2="97.4135166%"
                 id="linearGradient-1"
               >
-                <stop stopColor="#FDFEFF" offset="0%"></stop>
-                <stop stopColor="#DDE7F1" offset="100%"></stop>
+                <stop stopColor="#E8F3FA" offset="0%"></stop>
+                <stop stopColor="#D0E3EF" offset="100%"></stop>
               </linearGradient>
             </defs>
             <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
@@ -177,28 +121,33 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
             </g>
           </svg>
         </div>
-      </div>
-
-      {title ? <div style={modalTitleStyle}>{title}</div> : null}
-      {body ? (
-        <div style={getModalBodyStyle(status)}>
-          {body.map(sentence => {
-            return <p key={sentence}>{sentence}</p>;
-          })}
+        <div className="layout_text">
+          {title ? (
+            <div className="title_with_divider">
+              <div className="main_title">{title}</div>
+              <div className="divider" />
+            </div>
+          ) : null}
+          {body ? (
+            <div className="main_body">
+              {body.map(sentence => {
+                return <p key={sentence}>{sentence}</p>;
+              })}
+            </div>
+          ) : null}
+          <div className="actions">
+            {actionLabel && actionCB ? (
+              <a
+                className="btn"
+                onClick={(): void => {
+                  actionCB();
+                }}
+              >
+                {actionLabel}
+              </a>
+            ) : null}
+          </div>
         </div>
-      ) : null}
-
-      <div style={modalFooterStyle}>
-        {action_label && actionCB ? (
-          <a
-            style={modalBtnStyle}
-            onClick={(): void => {
-              actionCB();
-            }}
-          >
-            {action_label}
-          </a>
-        ) : null}
       </div>
     </div>
   );

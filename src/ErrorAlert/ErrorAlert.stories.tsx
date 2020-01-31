@@ -25,9 +25,12 @@ storiesOf("ErrorAlert", module)
       <ErrorAlert
         status="detected"
         custom_error_props={{
-          title: "error title",
-          body: ["body 1", "body 2"],
-          actionLabel: "label",
+          title: "Kunde inte ansluta till server",
+          body: [
+            "Återupprepade försök har gjorts, var god kontrollera din anslutning och prova igen.",
+            "Om problemet kvarstår kontakta oss via länk nedan."
+          ],
+          actionLabel: "Kontakta oss",
           actionCB: action("action callback")
         }}
       />
