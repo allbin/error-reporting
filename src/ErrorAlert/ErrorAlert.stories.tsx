@@ -35,4 +35,36 @@ storiesOf("ErrorAlert", module)
         }}
       />
     </div>
+  ))
+  .add("sent title body", () => (
+    <div style={bgDiv}>
+      <ErrorAlert
+        status="sent"
+        custom_error_props={{
+          title: "Kunde inte ansluta till server",
+          body: [
+            "Återupprepade försök har gjorts, var god kontrollera din anslutning och prova igen.",
+            "Om problemet kvarstår kontakta oss via länk nedan."
+          ],
+          actionLabel: "Kontakta oss",
+          actionCB: action("action callback")
+        }}
+      />
+    </div>
+  ))
+  .add("failed title body", () => (
+    <div style={bgDiv}>
+      <ErrorAlert
+        status="failed"
+        custom_error_props={{
+          title: "Kunde inte ansluta till server",
+          body: [
+            "Återupprepade försök har gjorts, var god kontrollera din anslutning och prova igen.",
+            "Om problemet kvarstår kontakta oss via länk nedan."
+          ],
+          actionLabel: "Kontakta oss",
+          actionCB: action("action callback")
+        }}
+      />
+    </div>
   ));

@@ -106,6 +106,28 @@
   opacity: 0.8;
 }
 
+.status_bar {
+  font-size: 16px;
+  opacity: 1;
+  margin-top: 32px;
+}
+
+.status {
+  text-transform: capitalize;
+}
+
+.status.detected {
+  color: #3873ed;
+}
+
+.status.sent {
+  color: #28b257;
+}
+
+.status.failed {
+  color: #cc4d4d;
+}
+
 .main_body p {
   margin: 0 0 8px;
 }

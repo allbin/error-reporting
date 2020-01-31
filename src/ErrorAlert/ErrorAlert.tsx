@@ -60,36 +60,12 @@ function renderSVGBody(): ReactNode {
     </g>
   );
 }
-/*
-const getModalBodyStyle = (
-  status?: ErrorStatus | null
-): React.CSSProperties => {
-  const base = {
-    color: "#285075",
-    padding: "3vh 0",
-    opacity: 0.7,
-    fontSize: "3vh"
-  };
-  switch (status) {
-    case "sent": {
-      return Object.assign({}, base, { color: "#00c896" });
-    }
-    default: {
-      return Object.assign({}, base, {
-        color: "#cc4d4d"
-      });
-    }
-  }
-};
-*/
+
 const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
   status,
   custom_error_props
 }) => {
   const { title, body, actionLabel, actionCB } = custom_error_props || {};
-
-  console.log(actionLabel);
-  console.log(actionCB);
 
   return (
     <div className="container_style">
@@ -122,17 +98,25 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
           </svg>
         </div>
         <div className="layout_text">
-          {title ? (
-            <div className="title_with_divider">
-              <div className="main_title">{title}</div>
-              <div className="divider" />
-            </div>
-          ) : null}
+          <div className="title_with_divider">
+            <div className="main_title">{title ? title : "Error"}</div>
+            <div className="divider" />
+          </div>
           {body ? (
             <div className="main_body">
               {body.map(sentence => {
                 return <p key={sentence}>{sentence}</p>;
               })}
+            </div>
+          ) : (
+            <div className="main_body">
+              <p>Something went wrong.</p>
+            </div>
+          )}
+          {status !== undefined ? (
+            <div className="status_bar">
+              <b>Error report:</b>{" "}
+              <span className={`status ${status}`}>{status}</span>
             </div>
           ) : null}
           <div className="actions">
