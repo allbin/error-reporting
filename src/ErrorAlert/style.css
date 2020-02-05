@@ -112,10 +112,6 @@
   margin-top: 32px;
 }
 
-.status {
-  text-transform: capitalize;
-}
-
 .status.detected {
   color: #3873ed;
 }
