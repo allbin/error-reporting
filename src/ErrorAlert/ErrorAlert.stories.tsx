@@ -31,7 +31,8 @@ storiesOf("ErrorAlert", module)
             "Om problemet kvarstår kontakta oss via länk nedan."
           ],
           actionLabel: "Kontakta oss",
-          actionCB: action("action callback")
+          actionCB: action("action callback"),
+          report_sending_message: "Sammanställer och skickar felrapport..."
         }}
       />
     </div>
@@ -47,7 +48,8 @@ storiesOf("ErrorAlert", module)
             "Om problemet kvarstår kontakta oss via länk nedan."
           ],
           actionLabel: "Kontakta oss",
-          actionCB: action("action callback")
+          actionCB: action("action callback"),
+          report_sent_message: "Felrapport har skickats."
         }}
       />
     </div>
@@ -63,7 +65,9 @@ storiesOf("ErrorAlert", module)
             "Om problemet kvarstår kontakta oss via länk nedan."
           ],
           actionLabel: "Kontakta oss",
-          actionCB: action("action callback")
+          actionCB: action("action callback"),
+          report_sent_message:
+            "Det gick inte att skicka felrapport. Kontakta gärna oss direkt."
         }}
       />
     </div>
