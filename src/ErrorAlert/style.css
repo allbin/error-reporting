@@ -1,0 +1,151 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono:400,500&display=swap");
+
+.container_style {
+  font-family: "Roboto Mono", monospace;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000000;
+  background-color: #e8f3fa;
+}
+
+.layout_base {
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 100%;
+  align-items: center;
+  padding: 0 12%;
+}
+
+@media only screen and (max-width: 1500px) {
+  .layout_base {
+    padding: 0 6%;
+    grid-template-columns: 1fr 3fr !important;
+  }
+  .main_title {
+    font-size: 42px !important;
+  }
+  .main_body {
+    font-size: 16px !important;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .layout_base {
+    padding: 0 12%;
+    display: block;
+  }
+  .layout_graphic {
+    justify-content: left !important;
+  }
+  .graphic {
+    width: 200px !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .layout_base {
+    display: block;
+  }
+}
+
+.layout_graphic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6%;
+}
+
+@keyframes ANIM_GRAPHIC {
+  0% {
+    transform: rotate(30deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(4deg);
+  }
+  90% {
+    transform: rotate(0deg);
+  }
+}
+
+.graphic {
+  width: 80%;
+  transform: rotate(0deg);
+  transform-origin: bottom center;
+  animation: ANIM_GRAPHIC 0.7s ease-in-out;
+}
+
+.layout_text {
+  color: #1c3f5f;
+  margin-bottom: 6%;
+}
+
+.title_with_divider {
+  width: auto;
+  display: inline-block;
+}
+
+.main_title {
+  font-size: 52px;
+  font-weight: 500;
+}
+
+.divider {
+  background-color: #f9c08b;
+  height: 5px;
+  border-radius: 2px;
+  width: 60%;
+  margin: 28px 0 34px;
+}
+
+.main_body {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.status_bar {
+  font-size: 16px;
+  opacity: 1;
+  margin-top: 32px;
+}
+
+.status.detected {
+  color: #3873ed;
+}
+
+.status.sent {
+  color: #28b257;
+}
+
+.status.failed {
+  color: #cc4d4d;
+}
+
+.main_body p {
+  margin: 0 0 8px;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.btn {
+  display: inline-block;
+  border-radius: 3px;
+  background-color: #1c3f5f;
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  padding: 18px 52px;
+  margin-top: 32px;
+}
+
+.btn:hover {
+  background-color: #0b2136;
+}
