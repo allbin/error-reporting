@@ -3,35 +3,50 @@
   "version": "0.2.0",
   "description": "",
   "main": "dist/index.js",
-  "scripts": {
-    "release": "gulp4 release",
-    "release:minor": "gulp4 release:minor",
-    "release:major": "gulp4 release:major",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "dependencies": {
-    "react": "16.4.1",
-    "axios": "0.18.0",
-    "sourcemapped-stacktrace": "1.1.8"
+    "sourcemapped-stacktrace": "1.1.x"
   },
   "devDependencies": {
-    "babel-core": "6.26.0",
-    "babel-eslint": "8.2.3",
-    "babel-preset-env": "1.6.1",
-    "babel-preset-react-app": "3.1.1",
-    "eslint": "4.19.1",
-    "eslint-plugin-import": "2.11.0",
-    "eslint-plugin-react": "7.7.0",
-    "gulp4": "4.0.2",
-    "gulp-babel": "7.0.1",
-    "gulp-bump": "3.1.1",
-    "gulp-allbin": "git+https://bitbucket.org/allbin/gulp-allbin.git#v0.0.6",
-    "gulp-eslint": "4.0.2",
-    "del": "5.1.0"
+    "axios": "0.20.0",
+    "@testing-library/jest-dom": "4.x",
+    "@testing-library/react": "9.x",
+    "@testing-library/user-event": "7.x",
+    "@types/jest": "24.x",
+    "@types/node": "12.x",
+    "@types/react": "16.x",
+    "@types/react-dom": "16.x",
+    "react": "17.x",
+    "react-dom": "17.x",
+    "react-scripts": "3.4.4",
+    "typescript": "4.0.3",
+    "@allbin/eslint-config-react": "0.0.10",
+    "eslint-config-prettier": "6.x",
+    "prettier": "2.x"
   },
   "peerDependencies": {
-    "styled-components": "3.x"
+    "react": "16.x || 17.x",
+    "axios": "0.x"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

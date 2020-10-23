@@ -121,9 +121,9 @@ var onerrorListener = function onerrorListener(message, source, lineno, colno, e
 
 if (!window.onerror) {
   window.onerror = onerrorListener;
-  console.log("ErrReporting: Listening to window.onerror");
+  console.log("ErrorReporting: Listening to window.onerror");
 } else if (window.onerror !== onerrorListener) {
-  console.log("ErrReporting: window.onerror already assigned. Use setConfig({ override_window_onerror: true }) to override.");
+  console.log("ErrorReporting: window.onerror already assigned. Use setConfig({ override_window_onerror: true }) to override.");
 }
 
 var errorReporting = {
@@ -364,14 +364,14 @@ function postToSlack(msg) {
   var post_stack = new Error().stack;
   return new Promise(function (resolve, reject) {
     if (!config.slack_webhook) {
-      var err = new Error("ErrReporting: Property 'slack_webhook' not specified in config.");
+      var err = new Error("ErrorReporting: Property 'slack_webhook' not specified in config.");
       err.stack = post_stack;
       console.error(err);
       reject(err);
       return;
     }
     if (config.disable_slack_posting) {
-      console.log("ErrReporting: Not sent because of disable_slack_posting flag!");
+      console.log("ErrorReporting: Not sent because of disable_slack_posting flag!");
       resolve();
       return;
     }
@@ -386,10 +386,10 @@ function postToSlack(msg) {
       method: "POST",
       data: "payload=" + payload
     }).then(function (res) {
-      console.log("ErrReporting: Successfully posted to slack.");
+      console.log("ErrorReporting: Successfully posted to slack.");
       resolve();
     }).catch(function (err) {
-      console.error("ErrReporting: Failed to post to slack.");
+      console.error("ErrorReporting: Failed to post to slack.");
       reject(err);
     });
   });
