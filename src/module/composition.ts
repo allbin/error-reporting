@@ -8,28 +8,27 @@ export const composeNetworkErrMessage = (
 ): SlackBlock[] => {
   const blocks: SlackBlock[] = [];
 
-  let msg = "NETWORK ERROR: at ";
-  if (err.timestamp) {
-    msg += err.timestamp.toISOString();
-  } else {
-    msg += new Date().toISOString();
-  }
-  msg += " ";
+  let msg = `NETWORK ERROR: at ${
+    err.timestamp ? err.timestamp.toISOString() : new Date().toISOString()
+  } `;
+
   let cfg = "";
   if (err.config) {
-    cfg = "URL: " + err.config.url + ", " + err.config.method;
-    cfg +=
+    cfg = `URL:  ${err.config.url}, ${err.config.method}
+    ${
       err.config.headers && err.config.headers.Authorization
-        ? " (Auth header sent)\n"
-        : "(NO Auth header)\n";
+        ? "(Auth header sent)"
+        : "(NO Auth header)"
+    }
+    `;
+
     if (err.config.data) {
       cfg +=
         //NOTE: JSON.stringify() is NOT guaranteed to return a string, when passing in undefined it returns typeof undefined!
-        "DATA SENT: '" +
-        JSON.stringify(err.config.data)
+        `DATA SENT: '${JSON.stringify(err.config.data)
           .toString()
-          .substr(0, config.max_network_request_data) +
-        "'\n";
+          .substr(0, config.max_network_request_data)}'
+          `;
     } else {
       cfg += "NO DATA SENT";
     }
@@ -133,16 +132,13 @@ export const composeMessage = async (
   return new Promise(async (resolve, reject) => {
     const blocks: SlackBlock[] = [];
 
-    let head = config.header || "";
-    head +=
-      location.protocol +
-      location.hostname +
-      " '" +
-      location.pathname +
-      "'" +
-      "\n";
-    head += "Created at `" + new Date().toISOString() + "`\n";
-    head += "\nERROR: `" + err.message + "`\n";
+    let head = `${config.header || ""}
+${window.location.protocol}${window.location.hostname} '${
+      window.location.pathname
+    }'
+Created at \`${new Date().toISOString()}\`
+ERROR: \`${err.message}"\`
+`;
 
     blocks.push({
       type: "section",

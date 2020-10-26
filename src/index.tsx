@@ -5,6 +5,8 @@ import ErrorReporting, { setConfig } from "./module";
 
 setConfig({
   slack_webhook: "https://example.com",
+  disable_slack_posting: true,
+  header: "ErrorReporting development repository.",
 });
 
 ReactDOM.render(

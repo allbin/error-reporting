@@ -148,14 +148,14 @@ export const DefaultErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
 
           <div className="actions">
             {onClose ? (
-              <a
+              <div
                 className="btn"
                 onClick={(): void => {
                   onClose();
                 }}
               >
                 {close_label}
-              </a>
+              </div>
             ) : null}
           </div>
         </div>

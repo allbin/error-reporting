@@ -9,12 +9,7 @@ export const listeners: ((status: ErrorStatus) => void)[] = [];
 let windowOnerrorTimeout: NodeJS.Timeout | number | null;
 let windowOnerrorReference: ReactError;
 
-let error_status: ErrorStatus | null = null;
-
 function setStatus(status: ErrorStatus): void {
-  error_status = status;
-  let prefixes = "";
-
   listeners.forEach((listenerCB) => listenerCB(status));
 }
 
@@ -38,7 +33,10 @@ export function setError(err: ExtendedError): void {
   setStatus("detected");
   composeMessage(config, err)
     .then((blocks) => {
-      console.log("Error report generated:", JSON.stringify(blocks));
+      console.log(
+        "Error report generated:",
+        JSON.stringify(blocks, undefined, 2)
+      );
       return postToSlack(config, blocks);
     })
     .then(() => {

@@ -58,7 +58,7 @@ export class ErrorBoundary extends React.Component<ERProps, ERState> {
   }
 
   onClose() {
-    () => (window.location.href = "/");
+    window.location.href = "/";
   }
 
   render() {
