@@ -1,8 +1,8 @@
 {
-  "name": "error-reporting",
+  "name": "@allbin/error-reporting",
   "version": "0.2.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "lib/module/index.js",
   "private": true,
   "dependencies": {
     "sourcemapped-stacktrace": "1.1.x"
@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "node_modules/.bin/tsc -p tsconfig.build.json",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
