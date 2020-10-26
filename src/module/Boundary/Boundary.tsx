@@ -2,7 +2,7 @@ import React from "react";
 import { ErrorStatus, getConfig } from "../";
 import { ReactError } from "../interfaces";
 import { DefaultErrorAlert, ErrorAlertProps } from "../DefaultErrorAlert";
-import { listeners } from "../listener";
+import { listeners, setError } from "../listener";
 export interface ERProps {
   ErrorAlert?: React.FC<ErrorAlertProps>;
   language?: "sv-SE" | "en-US";
@@ -44,7 +44,7 @@ export class ErrorBoundary extends React.Component<ERProps, ERState> {
     });
 
     err.component_trace = info.componentStack;
-    throw err;
+    setError(err);
   }
 
   componentWillUnmount(): void {
@@ -62,6 +62,11 @@ export class ErrorBoundary extends React.Component<ERProps, ERState> {
   }
 
   render() {
+    console.log(
+      "this.state.hasError, this.state.status:",
+      this.state.hasError,
+      this.state.status
+    );
     const EA = this.props.ErrorAlert || DefaultErrorAlert;
     if (this.state.hasError && EA) {
       return (

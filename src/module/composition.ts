@@ -8,9 +8,10 @@ export const composeNetworkErrMessage = (
 ): SlackBlock[] => {
   const blocks: SlackBlock[] = [];
 
-  let msg = `NETWORK ERROR: at ${
+  let msg = `NETWORK ERROR: at \`${
     err.timestamp ? err.timestamp.toISOString() : new Date().toISOString()
-  } `;
+  }\`
+`;
 
   let cfg = "";
   if (err.config) {
@@ -28,23 +29,26 @@ export const composeNetworkErrMessage = (
         `DATA SENT: '${JSON.stringify(err.config.data)
           .toString()
           .substr(0, config.max_network_request_data)}'
-          `;
+`;
+    } else {
+      cfg += "NO DATA SENT";
+    }
+    if (err.config.params) {
+      cfg +=
+        //NOTE: JSON.stringify() is NOT guaranteed to return a string, when passing in undefined it returns typeof undefined!
+        `PARAMS SENT: '${JSON.stringify(err.config.params)
+          .toString()
+          .substr(0, config.max_network_request_data)}'
+`;
     } else {
       cfg += "NO DATA SENT";
     }
   } else {
     cfg = "NO NETWORK REQUEST axios CONFIG FOUND.";
   }
-
-  blocks.push({
-    type: "section",
-    text: {
-      type: "mrkdwn",
-      text: "```" + msg + "```",
-    },
-  });
-
-  msg = "";
+  if (cfg.length > 0) {
+    msg += "```" + cfg + "```\n";
+  }
   if (err.response) {
     let data = JSON.stringify(err.response.data);
     if (!data) {
@@ -58,47 +62,28 @@ export const composeNetworkErrMessage = (
     } else {
       headers = "'" + headers + "'";
     }
-    msg += "\nResponse data: " + data;
-    msg += "\nResponse status: " + err.response.status;
+    msg += "```\nResponse status: " + err.response.status;
     msg += "\nResponse headers: " + headers;
-    msg += "\n" + cfg;
+    msg += "\nResponse data: " + data;
+    msg += "```";
   } else if (err.request) {
-    msg += "Probably OPTIONS failed! No response was given.";
-    msg += "\n" + cfg;
+    msg += "```Probably OPTIONS failed! No response was given.";
+    msg += "```";
   } else {
     msg +=
-      "Unknown error; response and request data undefined. NO HTTP STATUS CODE :(";
-    msg += "\n" + cfg;
+      "```Unknown error; response and request data undefined. NO HTTP STATUS CODE :(";
+    msg += "```";
   }
 
   blocks.push({
     type: "section",
     text: {
       type: "mrkdwn",
-      text: "```" + msg + "```",
+      text: msg,
     },
   });
 
   return blocks;
-};
-
-const composeErrMessage = (err: ReactError): SlackBlock[] => {
-  let msg = "ERROR: at ";
-  if (err.timestamp) {
-    msg += err.timestamp.toISOString();
-  } else {
-    msg += new Date().toISOString();
-  }
-  msg += " ";
-  return [
-    {
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: "```" + msg + "```",
-      },
-    },
-  ];
 };
 
 const resolveStack = (err: ReactError): Promise<SlackBlock> => {
@@ -109,7 +94,10 @@ const resolveStack = (err: ReactError): Promise<SlackBlock> => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "```" + resolved_trace.join("\n").substr(0, 2000) + "```",
+            text:
+              "Stack trace:\n```" +
+              resolved_trace.join("\n").substr(0, 2000) +
+              "```",
           },
         });
       });
@@ -133,11 +121,11 @@ export const composeMessage = async (
     const blocks: SlackBlock[] = [];
 
     let head = `${config.header || ""}
-${window.location.protocol}${window.location.hostname} '${
+URL/LOCATION: \`${window.location.protocol} ${window.location.hostname} '${
       window.location.pathname
-    }'
-Created at \`${new Date().toISOString()}\`
-ERROR: \`${err.message}"\`
+    }'\`
+ErrorReport created at \`${new Date().toISOString()}\`
+ERROR MSG: \`${err.message}\`
 `;
 
     blocks.push({
@@ -148,12 +136,10 @@ ERROR: \`${err.message}"\`
       },
     });
 
-    const body =
-      err.network_error || err.isAxiosError
-        ? composeNetworkErrMessage(config, err)
-        : composeErrMessage(err);
+    if (err.network_error || err.isAxiosError) {
+      blocks.push(...composeNetworkErrMessage(config, err));
+    }
 
-    blocks.push(...body);
     blocks.push({ type: "divider" });
 
     const trace = await resolveStack(err);
@@ -165,7 +151,10 @@ ERROR: \`${err.message}"\`
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "```" + err.component_trace + "```",
+          text:
+            "React component trace:\n```" +
+            err.component_trace.substr(0, 2500) +
+            "```",
         },
       });
     }

@@ -48,6 +48,14 @@ export function setError(err: ExtendedError): void {
 }
 
 //INITIAL ERROR LISTENER ATTACHING
+const onunhandledrejectionListener = (
+  rejection: PromiseRejectedResult | Event
+) => {
+  if ((rejection as PromiseRejectedResult).reason) {
+    const { reason } = rejection as PromiseRejectedResult;
+    onerrorListener(reason.toString(), undefined, undefined, undefined, reason);
+  }
+};
 const onerrorListener = (
   message: Event | string,
   source?: string,
@@ -83,8 +91,10 @@ const onerrorListener = (
 
 if (!window.onerror) {
   window.onerror = onerrorListener;
+  window.onunhandledrejection = onunhandledrejectionListener;
   console.log("ErrorReporting: Listening to window.onerror");
 } else if (window.onerror !== onerrorListener) {
   window.onerror = onerrorListener;
-  console.log("ErrorReporting: window.onerror already assigned.");
+  window.onunhandledrejection = onunhandledrejectionListener;
+  console.warn("ErrorReporting: window.onerror has been overwritten!");
 }
