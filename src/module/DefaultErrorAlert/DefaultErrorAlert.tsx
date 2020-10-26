@@ -92,7 +92,7 @@ function getStatusMessage(
   }
 }
 
-const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
+export const DefaultErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
   status,
   onClose,
   language = "sv-SE",
@@ -163,5 +163,3 @@ const ErrorAlert: React.FunctionComponent<ErrorAlertProps> = ({
     </div>
   );
 };
-
-export default ErrorAlert;

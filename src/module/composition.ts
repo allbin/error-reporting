@@ -1,10 +1,13 @@
 import { ReactError, Config } from "./interfaces";
+import { SlackBlock } from "./index";
 import { mapStackTrace } from "sourcemapped-stacktrace";
 
 export const composeNetworkErrMessage = (
   config: Config,
   err: ReactError
-): string => {
+): SlackBlock[] => {
+  const blocks: SlackBlock[] = [];
+
   let msg = "NETWORK ERROR: at ";
   if (err.timestamp) {
     msg += err.timestamp.toISOString();
@@ -34,6 +37,15 @@ export const composeNetworkErrMessage = (
     cfg = "NO NETWORK REQUEST axios CONFIG FOUND.";
   }
 
+  blocks.push({
+    type: "section",
+    text: {
+      type: "mrkdwn",
+      text: "```" + msg + "```",
+    },
+  });
+
+  msg = "";
   if (err.response) {
     let data = JSON.stringify(err.response.data);
     if (!data) {
@@ -59,66 +71,108 @@ export const composeNetworkErrMessage = (
       "Unknown error; response and request data undefined. NO HTTP STATUS CODE :(";
     msg += "\n" + cfg;
   }
-  return msg;
+
+  blocks.push({
+    type: "section",
+    text: {
+      type: "mrkdwn",
+      text: "```" + msg + "```",
+    },
+  });
+
+  return blocks;
 };
 
-const composeErrMessage = (err: ReactError): string => {
-  let msg = "NETWORK ERROR: at ";
+const composeErrMessage = (err: ReactError): SlackBlock[] => {
+  let msg = "ERROR: at ";
   if (err.timestamp) {
     msg += err.timestamp.toISOString();
   } else {
     msg += new Date().toISOString();
   }
   msg += " ";
-  return msg;
+  return [
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: "```" + msg + "```",
+      },
+    },
+  ];
 };
 
-const resolveStack = (err: ReactError): Promise<string[]> => {
+const resolveStack = (err: ReactError): Promise<SlackBlock> => {
   return new Promise((resolve) => {
     if (err.stack) {
-      mapStackTrace(err.stack, (resolvedTrace) => {
-        resolve(resolvedTrace);
+      mapStackTrace(err.stack, (resolved_trace) => {
+        resolve({
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "```" + resolved_trace.join("\n").substr(0, 2000) + "```",
+          },
+        });
       });
     } else {
-      resolve(["NO STACK IN ERROR OBJECT"]);
+      resolve({
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "`NO STACK IN ERROR OBJECT`",
+        },
+      });
     }
   });
 };
 
-export const composeMessage = (
+export const composeMessage = async (
   config: Config,
-  err: ReactError,
-  prefix: string | null = null
-): Promise<string> => {
-  let head = config.header || "";
-  head +=
-    location.protocol +
-    location.hostname +
-    " '" +
-    location.pathname +
-    "'" +
-    "\n";
-  head += "Created at " + new Date().toISOString() + "\n";
-  if (prefix) {
-    head += prefix;
-  }
-  head += "\nERROR: " + err.message + "\n";
-  if (err.additional_message) {
-    head += err.additional_message + "\n";
-  }
+  err: ReactError
+): Promise<SlackBlock[]> => {
+  return new Promise(async (resolve, reject) => {
+    const blocks: SlackBlock[] = [];
 
-  const body = err.network_error
-    ? composeNetworkErrMessage(config, err)
-    : composeErrMessage(err);
+    let head = config.header || "";
+    head +=
+      location.protocol +
+      location.hostname +
+      " '" +
+      location.pathname +
+      "'" +
+      "\n";
+    head += "Created at `" + new Date().toISOString() + "`\n";
+    head += "\nERROR: `" + err.message + "`\n";
 
-  let trace = "";
-  if (err.component_trace) {
-    trace += err.component_trace + "\n---------\n";
-  }
-  return resolveStack(err).then((resolvedStack) => {
-    if (Array.isArray(resolvedStack)) {
-      trace += resolvedStack.join("\n");
+    blocks.push({
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: head,
+      },
+    });
+
+    const body =
+      err.network_error || err.isAxiosError
+        ? composeNetworkErrMessage(config, err)
+        : composeErrMessage(err);
+
+    blocks.push(...body);
+    blocks.push({ type: "divider" });
+
+    const trace = await resolveStack(err);
+    blocks.push(trace);
+
+    if (err.component_trace) {
+      blocks.push({ type: "divider" });
+      blocks.push({
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "```" + err.component_trace + "```",
+        },
+      });
     }
-    return head + "\n" + body + "\n" + trace;
+    resolve(blocks);
   });
 };

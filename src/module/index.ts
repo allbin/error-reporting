@@ -27,6 +27,9 @@ let internal_config: Config = {
 export const setConfig = (config: ErrorReportConfig): void => {
   internal_config = { ...internal_config, ...config };
 };
+export const getConfig = (): Config => {
+  return internal_config;
+};
 
 /** Convenience function to set config.header. Header supports markdown. */
 export const setHeader = (header: string): void => {
