@@ -121,9 +121,7 @@ export const composeMessage = async (
     const blocks: SlackBlock[] = [];
 
     let head = `${config.header || ""}
-URL/LOCATION: \`${window.location.protocol} ${window.location.hostname} '${
-      window.location.pathname
-    }'\`
+URL/LOCATION: \`${window.location.href}\`
 ErrorReport created at \`${new Date().toISOString()}\`
 ERROR MSG: \`${err.message}\`
 `;
