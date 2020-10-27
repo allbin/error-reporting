@@ -1,6 +1,12 @@
 import React, { useState, FC } from "react";
 import axios from "axios";
-import { getConfig, setConfig } from "../module";
+import {
+  getConfig,
+  setConfig,
+  SlackBlock,
+  sendLogString,
+  sendSlackBlocks,
+} from "../module";
 
 const btn_style = {
   display: "inline-block",
@@ -8,6 +14,7 @@ const btn_style = {
   cursor: "pointer",
   padding: "4px",
   margin: "5px",
+  backgroundColor: "rgba(0,0,100,0.1)",
 };
 const input_style = {
   display: "inline-block",
@@ -56,9 +63,32 @@ const createNetworkError404 = async () => {
   }
 };
 
+const custom_blocks_message: SlackBlock[] = [
+  {
+    type: "section",
+    text: {
+      type: "plain_text",
+      text: "my plain text",
+      emoji: false,
+    },
+  },
+  { type: "divider" },
+  {
+    type: "section",
+    text: {
+      type: "mrkdwn",
+      text: "my `markdown` text",
+    },
+  },
+];
+
 const App: FC = () => {
   const [react_error, setReactError] = useState(false);
   const [react_network_error, setReactNetworkError] = useState(false);
+  const [custom_string, setCustomString] = useState("custom log string");
+  const [custom_blocks, setCustomBlocks] = useState(
+    JSON.stringify(custom_blocks_message, undefined, 2)
+  );
   const [disable_posting, setDisablePosting] = useState(
     getConfig().disable_slack_posting
   );
@@ -101,8 +131,7 @@ const App: FC = () => {
         currently: {disable_posting ? "not sending" : "sending"}
       </div>
       <div>
-        <big>INSIDE react cycle:</big>
-        <br />
+        <h2>throw INSIDE react cycle:</h2>
 
         <span
           style={btn_style}
@@ -123,8 +152,7 @@ const App: FC = () => {
       </div>
 
       <div style={{ marginTop: "50px" }}>
-        <big>OUTSIDE react cycle:</big>
-        <br />
+        <h2>throw OUTSIDE react cycle:</h2>
 
         <span
           style={btn_style}
@@ -143,6 +171,50 @@ const App: FC = () => {
           }}
         >
           click to throw a 404 network error
+        </span>
+      </div>
+
+      <div style={{ marginTop: "50px" }}>
+        <h2>custom log message without throwing an error:</h2>
+
+        <input
+          style={input_style}
+          value={custom_string}
+          onChange={(e) => setCustomString(e.target.value.trim())}
+        />
+        <span
+          style={{ ...btn_style, border: "1px solid black" }}
+          onClick={() => {
+            sendLogString(custom_string);
+          }}
+        >
+          click to send custom text-only log (ER.sendLogString())
+        </span>
+        <br />
+        <br />
+        <br />
+        <textarea
+          style={{ ...input_style, height: "300px", width: "500px" }}
+          onChange={(e) => setCustomBlocks(e.target.value)}
+          value={custom_blocks}
+        />
+        <br />
+        <span
+          style={{ ...btn_style, border: "1px solid black" }}
+          onClick={() => {
+            try {
+              const blocks: SlackBlock[] = JSON.parse(custom_blocks);
+              if (blocks) {
+                sendSlackBlocks(blocks);
+              }
+            } catch (error) {
+              console.error(
+                "Invalid JSON in textarea input! Custom log message not sent!"
+              );
+            }
+          }}
+        >
+          click to send custom text-only log (ER.sendSlackBlocks())
         </span>
       </div>
     </div>
