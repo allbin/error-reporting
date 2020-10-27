@@ -1,10 +1,17 @@
 import React, { useState, FC } from "react";
 import axios from "axios";
+import { getConfig, setConfig } from "../module";
 
 const btn_style = {
   display: "inline-block",
-  border: "1px solid black",
+  border: "2px solid red",
   cursor: "pointer",
+  padding: "4px",
+  margin: "5px",
+};
+const input_style = {
+  display: "inline-block",
+  border: "1px solid black",
   padding: "4px",
   margin: "5px",
 };
@@ -52,6 +59,10 @@ const createNetworkError404 = async () => {
 const App: FC = () => {
   const [react_error, setReactError] = useState(false);
   const [react_network_error, setReactNetworkError] = useState(false);
+  const [disable_posting, setDisablePosting] = useState(
+    getConfig().disable_slack_posting
+  );
+  const [webhook, setWebhook] = useState(getConfig().slack_webhook || "");
   if (react_error) {
     throw new Error(
       "An error has happened inside a render-cycle of a react component."
@@ -62,6 +73,33 @@ const App: FC = () => {
   }
   return (
     <div>
+      <div style={{ marginBottom: "50px" }}>
+        paste slack webhook:{" "}
+        <input
+          style={input_style}
+          value={webhook}
+          onChange={(e) => {
+            const v = e.target.value.trim();
+            setConfig({
+              slack_webhook: v,
+            });
+            setWebhook(v);
+          }}
+        />
+        <br />
+        <span
+          style={{ ...btn_style, border: "1px solid black" }}
+          onClick={() => {
+            setConfig({
+              disable_slack_posting: !disable_posting,
+            });
+            setDisablePosting(!disable_posting);
+          }}
+        >
+          click to toggle sending to slack
+        </span>{" "}
+        currently: {disable_posting ? "not sending" : "sending"}
+      </div>
       <div>
         <big>INSIDE react cycle:</big>
         <br />

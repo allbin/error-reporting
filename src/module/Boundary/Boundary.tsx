@@ -62,11 +62,6 @@ export class ErrorBoundary extends React.Component<ERProps, ERState> {
   }
 
   render() {
-    console.log(
-      "this.state.hasError, this.state.status:",
-      this.state.hasError,
-      this.state.status
-    );
     const EA = this.props.ErrorAlert || DefaultErrorAlert;
     if (this.state.hasError && EA) {
       return (

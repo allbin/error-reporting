@@ -8,19 +8,19 @@ export const postToSlack = (
 ): Promise<void> => {
   const postStack = new Error().stack;
   return new Promise((resolve, reject) => {
-    if (!config.slack_webhook) {
-      const err = new Error(
-        "ErrorReporting: Property 'slack_webhook' not specified in config."
-      );
-      err.stack = postStack;
-      console.error(err);
-      reject(err);
-      return;
-    }
     if (config.disable_slack_posting) {
       console.log(
         "ErrorReporting: Not sent because of disable_slack_posting flag!"
       );
+      resolve();
+      return;
+    }
+    if (!config.slack_webhook || config.slack_webhook.length === 0) {
+      const err = new Error(
+        "ErrorReporting: Unable to send report. Property 'slack_webhook' not specified in config."
+      );
+      err.stack = postStack;
+      console.error(err);
       resolve();
       return;
     }

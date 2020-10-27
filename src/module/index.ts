@@ -4,9 +4,7 @@ import { postToSlack, sendLog } from "./posting";
 
 export type ErrorStatus = "detected" | "sent" | "failed";
 
-export interface ErrorReportConfig extends Partial<Config> {
-  slack_webhook: string;
-}
+export interface ErrorReportConfig extends Partial<Config> {}
 
 export type SlackBlock =
   | { type: "divider" }
