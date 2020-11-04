@@ -2,7 +2,7 @@
 
 ## Usage example
 ```
-import ErrorReporting, { setConfig } from "./module";
+import ErrorReporting, { setConfig } from "error-reporting";
 
 setConfig({
   header: "*ErrorReporting development repository.*",
