@@ -1,147 +1,44 @@
-# ErrorReporting
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### Index
+## Available Scripts
 
-[Import](#import)  
-[Utilities](#er-utilities)  
-[Error reporting component](#error-reporting-component)  
-[Manually trigger errors](#manually-triggered-error-report)  
-[Special Error object properties](#special-error-properties)
+In the project directory, you can run:
 
-# Import
+### `yarn start`
 
-Use `import * as ER from error-reporting` in any file to access the ErrorReporting utilities and components.
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-# ER utilities
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
-ER exposes a number of functions and one default error alert component.
+### `yarn test`
 
-## Utility functions
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-`ER.setConfig(<object>)` See [Error reporting config](#error-reporting-config)
+### `yarn build`
 
-`ER.setHeader(<string>)` quick way to set global report header. Same as running `setConfig({ ... header: <string> })`.
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-`ER.sendDebug()` Takes an string array or string and send input string(s). Message not shown to user. 
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
 
-`ER.getConfig()` Returns the current config options.
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-`ER.getError()` Returns the error object if an error has been detected or has been submitted through [`setError(err)`](#manually-triggered-error-report). Otherwise returns null.
+### `yarn eject`
 
-`ER.getStatus()` Returns the status of the error report if an error has been detected or submitted. Possible return values are:
- 
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-- null
-- detected - Report is in the process of being composed.
-- sent - Report has successfully been sent.
-- failed - Report generation or posting to slack has failed.
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-`ER.setError(<Javascript Exception Object>)` See [Manually triggered error report](#manually-triggered-error-report)
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-## Error reporting component
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-`ER.ErrorReporting` The error boundary component. Place your components inside this to catch exceptions in the children. Component properties:
+## Learn More
 
-- ErrorAlert: The component shown when an uncaught exception is detected. This component will receive all props from `custom_error_props`.
-- callback: The function which is called when an exception is detected. It should return an object with the following properties:
-  - prefix: A string which is prefixed to the error report sent.
-  - custom_error_props: An object which is accessible in the ErrorAlert component.
-    Example:
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-```js
-import * as ER from "error-reporting";
-import MainView from "MainView";
-import Auth from "Auth";
-const ComponentX = () => {
-  const callback = () => {
-    return {
-      prefix: "myError report prefix",
-      custom_error_props: {
-        title: "error title shown to user",
-        body: ["error body shown to user"],
-        action_label: "label on alert button",
-        actionCB: () => {
-          // Send user to home screen etc.
-        }
-      }
-    };
-  };
-  return (
-    <ER.ErrorReporting callback={callback} ErrorAlert={ER.ErrorAlert}>
-      <Auth>
-        <MainView />
-      </Auth>
-    </ER.ErrorReporting>
-  );
-};
-```
-
-# Error reporting config
-
-Configure ErrorReporting by running `ER.setConfig(config_object)` with the possible properties listed below. The object extends the default config and overwrites previous values.
-
-## Config options
-
-`slack_webhook: <slack webhook url, required>`
-The url to which the error is posted.
-
-`disable_slack_posting: <bool, default false>`
-Use for disabling posting, for example during development.
-
-`header <string, default null>`
-A string prepended to the error message body.
-
-`max_network_request_data <int, default 400>`
-In the case of a network error the message includes data from the request if there is any. However that may be of any size, default will only include the first 400 characters.
-
-`override_window_onerror <bool, default false>`
-Set to true to override any other listener attached to window.onerror.
-
-## Example
-
-```
-ER.setConfig({
-    slack_webhook: https://hooks.slack.com/services/ABC/DEF123,
-    override_window_onerror: true
-});
-```
-
-# Manually triggered error report
-
-There are instances where it may not be possible to trigger a global (window) error, the error may be caught or silenced by a framework for example.  
-In these cases it may be useful to trigger an error report manually.
-
-Use function `ER.setError(error_object)` to trigger an ErrorReport where `error_object` is a Javascript exception object. This will also show any defined ErrorAlert.
-
-# Special Error properties
-
-In order to communicate what kind of error has been caught there are some special properties that ER are putting on the Javascript Exception Object (err_obj) itself.
-
-## Axios
-
-When using Axios to make network requests there may be additional information on the err_obj, however depending on what failed they are not guaranteed. For this reason **YOU** are required to put the property `network_error: true` on the err_obj manually before it is thrown or submitted through [`ER.setError()`](#manually_triggered_error_report).  
-This will ensure that the error report contains available request data and parameters.
-
-**NOTE:** Axios adds its own properties to the err_obj: `config`, `response`, `request`. Make sure you do not manually overwrite them!
-
-Example:
-
-```
-function myApiCall() {
-    return new Promise((resolve, reject) => {
-        axios({...}).then((res) => {
-            resolve(res);
-        }).catch((err) => {
-            err.network_error = true;
-            reject(err);
-        });
-    });
-}
-```
-
-## ER Internal properties
-
-Internally ER may add the properties:
-
-- `additional_message` - Used when error was detected by the window listener and not the React error boundary.
-- `component_trace` - Used to store Component Trace information from the React error boundary.
+To learn React, check out the [React documentation](https://reactjs.org/).

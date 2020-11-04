@@ -1,44 +1,29 @@
 {
-    "compilerOptions": {
-        "incremental": true,
-        "skipLibCheck": true,
-        "paths": {
-            "*": ["types/*"]
-        },
-        "baseUrl": ".",
-        "outDir": "dist",
-        "module": "esnext",
-        "target": "es6",
-        "lib": ["es7", "dom"],
-        "sourceMap": true,
-        "declaration": true,
-        "newLine": "LF",
-        "declarationDir": "dist",
-        "jsx": "react",
-        "moduleResolution": "node",
-        "rootDirs": ["src", "storybook"],
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noImplicitAny": true,
-        "importHelpers": true,
-        "strictNullChecks": true,
-        "noUnusedLocals": true,
-        "allowSyntheticDefaultImports": true,
-        "downlevelIteration": true,
-        "strict": true,
-        "allowJs": false
-    },
-    "include": ["src", "types"],
-    "exclude": [
-        "node_modules",
-        "build",
-        "dist",
-        "scripts",
-        "acceptance-tests",
-        "webpack",
-        "jest",
-        "src/setupTests.ts",
-        "Gulpfile.js"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
 }
