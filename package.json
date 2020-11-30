@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf lib && tsc -p tsconfig.build.json",
+    "build": "rm -rf lib && tsc -p tsconfig.build.json && copyfiles -u 1 ./src/**/*.css ./lib/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
