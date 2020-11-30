@@ -1,0 +1,23 @@
+name: Node.js Package
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+
+jobs:
+ publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@allbin'
+      - run: npm ci
+      - run: npm run build && copyfiles -u 1 "./src/**/*.css" "./lib/"
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPMJS_TOKEN}}
+
