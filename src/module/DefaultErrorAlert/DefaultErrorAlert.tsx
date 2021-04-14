@@ -53,20 +53,20 @@ const content: { "sv-SE": ContentStrings; "en-US": ContentStrings } = {
     ],
     close_label: "Ladda om",
     status_failed:
-      "Det gick inte att skicka rapporten. Vänligen kontakta support@allbinary.se",
+      "Det gick inte att skicka rapporten. Vänligen kontakta support@allbinary.se.",
     status_sending: "Felrapport skickas... vänligen vänta.",
     status_sent: "Rapporten är skickad!",
   },
   "en-US": {
-    title: "Critial error",
+    title: "Critical error",
     body: [
       "A critical error has occured.",
       "Please wait until error report has been sent.",
-      "If this happends multiple times please contant support at support@allbinary.se",
+      "If this occurs multiple times please contact support at support@allbinary.se.",
     ],
     close_label: "Reload",
     status_failed:
-      "Error report could not be sent. Please contant support@allbinary.se",
+      "Error report could not be sent. Please contact support@allbinary.se.",
     status_sending: "Error report is being sent... please wait.",
     status_sent: "Error report has been sent!",
   },
